@@ -1,0 +1,41 @@
+Metadata-Version: 2.4
+Name: virne
+Version: 1.0.0
+Summary: Virne: simulator & benchmark for NFV resource allocation — heuristics-only build vendored for the vne_online_embedding task (learning stack removed; see task README)
+License: Apache-2.0
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: numpy<3.0,>=2.5.2
+Requires-Dist: pandas>=3.0.5
+Requires-Dist: matplotlib>=3.11.1
+Requires-Dist: scipy>=1.18.0
+Requires-Dist: pyyaml>=6.0.3
+Requires-Dist: networkx>=3.6.1
+Requires-Dist: tqdm>=4.70.0
+Requires-Dist: ortools>=9.15.6755
+Requires-Dist: hydra-core>=1.3.5
+Requires-Dist: omegaconf>=2.3
+Requires-Dist: colorlog>=6.12.0
+Requires-Dist: sympy>=1.12
+
+# virne (heuristics-only vendored build)
+
+Vendored from the author's virne fork (upstream: https://github.com/GeminiLight/virne,
+ICLR 2026 benchmark, Apache-2.0) with the learning stack removed:
+
+- `virne/solver/learning/` deleted; `solver/__init__.py` patched accordingly
+- `system/base_system.py`: RL branch of `ready()` removed (unreachable by construction)
+- `utils/dataset.py`: torch import guarded (torch absent in this build)
+- `network/dataset_generator.py`: vestigial `from torch import seed` dropped
+- `pyproject.toml`: dependencies trimmed to the heuristic core (no torch /
+  torch_geometric / tensorboard / wandb / scikit-learn)
+
+All task anchors were measured on exactly this code (see ../README.md).
+
+## Task-level change vs upstream (2026-09-01)
+
+`solver.shortest_method` default changed **k_shortest → available_shortest**
+(`virne/configs/main.yaml`). The task author's call: residual-graph routing is the
+sane default for everyone — starter, baselines and submissions alike — so the task
+measures embedding intelligence, not infrastructure-discovery luck. All anchors are
+(re-)measured under this default.

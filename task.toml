@@ -1,0 +1,57 @@
+# OpenRSI-Index task manifest — nfv-resource-allocation
+# Schema 1.4, field set mirrors rsi-tasks/gemm-h100-refined (public 1-node task).
+# Original RSI-Exam 1.3 manifest:
+#   /Users/geminilight/projects/research/rsi-exam-vne/vne-online-embedding/task.toml
+
+schema_version = "1.4"
+
+[task]
+name = "rsi/nfv-resource-allocation"
+version = "0.1.0"
+description = "Improve a deterministic heuristic for online NFV resource allocation: embed or reject each arriving virtual-network request on a shared substrate where every decision changes what can be accepted later; graded on sealed request streams, higher long-run time-averaged revenue is better."
+
+[metadata]
+author_name  = "Tianfu Wang"
+author_email = "tianfuwang.cs@gmail.com"
+difficulty_explanation = "Online NFV resource allocation (virtual network embedding) couples combinatorial node placement and link routing with sequential decision-making under uncertainty: ranking rules, load and locality awareness, fragmentation control, retry and backtracking must be balanced inside a harness-enforced per-request time budget, and improvements must generalize across sealed streams from the same generators."
+verification_explanation = "A trusted grader process owns the simulation and accounting (virne's own Recorder/Counter); the submission runs in a privilege-dropped decision server that receives only per-request snapshots (current v_net with lifetime/arrival_time stripped to None; current p_net state) and returns JSON decisions that the grader re-validates structurally and resource-wise before deployment. Held-out stream files are root-only and never enter the decision server; scores come exclusively from the trusted side; a per-request time budget is enforced with state-preserving timeouts and server respawn on hard hangs."
+category = "Systems"
+subcategory = "Online Optimization"
+tags = ["autoresearch", "nfv", "resource-allocation", "vne", "virtual-network-embedding", "online-algorithms", "combinatorial-optimization", "heuristic", "cpu-only"]
+expert_time_estimate_hours = 12.0
+
+[metadata.rsi_harness.verifier]
+gpus = 0
+
+[environment]
+os = "linux"
+cpus = 8
+memory_mb = 16384
+storage_mb = 20480
+build_timeout_sec = 7200.0
+workdir = "/app"
+gpus = 0
+# "public" during build only (pip deps for the vendored heuristic core);
+# agent and verifier below are fully sealed. Pre-bake wheels to narrow later.
+network_mode = "public"
+
+[environment.env]
+VNE_VISIBLE_SEEDS = "0,1,2"
+VNE_RATE = "0.12"
+VNE_STREAM_LEN = "1000"
+
+[agent]
+timeout_sec = 43200.0
+network_mode = "no-network"
+
+[verifier]
+timeout_sec = 14400.0
+network_mode = "no-network"
+environment_mode = "separate"
+
+[verifier.env]
+# Heldout seeds stay sealed inside the verifier image (baked into the build);
+# rsi-tasks/ is a public repo, so no secret material may appear here.
+VNE_VERIFY_STREAM_LEN = "1000"
+VNE_VERIFY_TIME_BUDGET_SEC = "3"
+VNE_VERIFY_MAX_REWARD = "1.0"

@@ -1,0 +1,114 @@
+{
+  "runtime": "decision-isolated",
+  "num_v_nets": 1000,
+  "rate": 0.12,
+  "measured_at": "2026-09-19",
+  "starter": {
+    "visible": {
+      "s0": {
+        "mean_score": 6033.6227253704665,
+        "acceptance_rate": 0.609,
+        "avg_r2c_ratio": 0.26020104485734974,
+        "wall_sec": 77.3,
+        "request_timeouts": 0,
+        "restarts": 0
+      },
+      "s1": {
+        "mean_score": 4726.8170560007275,
+        "acceptance_rate": 0.531,
+        "avg_r2c_ratio": 0.22662258895549625,
+        "wall_sec": 92.4,
+        "request_timeouts": 0,
+        "restarts": 0
+      },
+      "s2": {
+        "mean_score": 4148.827824127139,
+        "acceptance_rate": 0.513,
+        "avg_r2c_ratio": 0.2144404784457753,
+        "wall_sec": 90.6,
+        "request_timeouts": 0,
+        "restarts": 0
+      }
+    },
+    "heldout": {
+      "s42": {
+        "mean_score": 4065.870970023815,
+        "acceptance_rate": 0.508,
+        "avg_r2c_ratio": 0.208512967875374,
+        "wall_sec": 77.1,
+        "request_timeouts": 0,
+        "restarts": 0
+      },
+      "s137": {
+        "mean_score": 4303.484147985826,
+        "acceptance_rate": 0.512,
+        "avg_r2c_ratio": 0.21880901957055476,
+        "wall_sec": 84.8,
+        "request_timeouts": 0,
+        "restarts": 0
+      },
+      "s2024": {
+        "mean_score": 4591.641753132155,
+        "acceptance_rate": 0.542,
+        "avg_r2c_ratio": 0.22927044653007972,
+        "wall_sec": 77.4,
+        "request_timeouts": 0,
+        "restarts": 0
+      }
+    }
+  },
+  "c4": {
+    "visible": {
+      "s0": {
+        "mean_score": 10893.73527832476,
+        "acceptance_rate": 0.859,
+        "avg_r2c_ratio": 0.5585848665807084,
+        "wall_sec": 29.1,
+        "request_timeouts": 0,
+        "restarts": 0
+      },
+      "s1": {
+        "mean_score": 10723.284367290491,
+        "acceptance_rate": 0.822,
+        "avg_r2c_ratio": 0.5414718235728928,
+        "wall_sec": 30.7,
+        "request_timeouts": 0,
+        "restarts": 0
+      },
+      "s2": {
+        "mean_score": 10562.970631267206,
+        "acceptance_rate": 0.837,
+        "avg_r2c_ratio": 0.5527924481190165,
+        "wall_sec": 27.9,
+        "request_timeouts": 0,
+        "restarts": 0
+      }
+    },
+    "heldout": {
+      "s42": {
+        "mean_score": 9468.966770512627,
+        "acceptance_rate": 0.805,
+        "avg_r2c_ratio": 0.5309089241948167,
+        "wall_sec": 26.0,
+        "request_timeouts": 0,
+        "restarts": 0
+      },
+      "s137": {
+        "mean_score": 9546.119458973973,
+        "acceptance_rate": 0.805,
+        "avg_r2c_ratio": 0.5230049858746716,
+        "wall_sec": 32.1,
+        "request_timeouts": 0,
+        "restarts": 0
+      },
+      "s2024": {
+        "mean_score": 9574.0362084268,
+        "acceptance_rate": 0.832,
+        "avg_r2c_ratio": 0.5564706943692713,
+        "wall_sec": 28.7,
+        "request_timeouts": 0,
+        "restarts": 0
+      }
+    }
+  }
+}

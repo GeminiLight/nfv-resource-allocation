@@ -1,0 +1,40 @@
+{
+ "_comment": "SEALED anchor table. root-owned, mode 0400, read by grade.py BEFORE the privilege drop. Never inject these through [verifier.env] (PID 1's environ is readable via /proc/1/environ). Every value is a MEASURED run, never an estimate (E4: anchors may be absent, never invented).",
+ "direction": "higher",
+ "tiers": {
+  "baseline_reward": 0.0,
+  "sota_reward": 0.6,
+  "upper_reward": 1.0
+ },
+ "upper": "per-case (oracle)",
+ "log_shift": 1000.0,
+ "_upper_rationale": "Oracle upper bound = the accept-everything revenue rate of THIS sealed stream: sum(revenue_i x lifetime_i) / horizon over ALL 1000 requests, computed offline from the materialized v_nets + events.yaml (2026-09-03). A valid bound (accepting a subset can never exceed accepting everything) and physically unreachable at this load (~72 concurrent VNs avg vs a 100-node substrate), i.e. a genuine oracle ceiling in the RSI-Exam sense. grade.py maps sota->0.60 and upper->1.00 log-linearly; above-sota pricing is now anchored to something real instead of an exponential asymptote.",
+ "_tiers_rationale": "Two-tier official shape (2026-09-03, author ruling): baseline = the SHIPPED first-fit template -> 0.0; sota = rsi-c4 -> 0.6, our strongest composed heuristic after a SECOND search round at the final regime (2026-09-02: 33 configs over 4 rounds; the first champion v17 was tuned at the old rate-0.08 regime and is 7.7% under c4 at 0.12). c4 = cpu_free^0.25 x adjacent_bw x (1+8 x demand-weighted proximity), total-demand node ordering, BFS-order restart, residual-graph routing. The per-case 'weak' values (nrm_rank, the standard published heuristic) are DOCUMENTED reference data, not anchors: the image ships no solver, the published level must be reconstructed by the agent, and the map between B and S is a single log-linear segment like the official two-anchor template. Learning SOTA reference (out of scope): trained ppo_dual_gat+ 9666/9922/10014, only +2.7% above c4 - the heuristic frontier is dense at this load.",
+ "_log_shift_rationale": "Band is linear in log(m + shift) between tiers. Raw revenues span ~1.1k-9k within a stream's anchors, roughly one decade; shift=1000 keeps all three tiers comfortably inside the log-linear region (baseline ~1.1k-1.9k must stay positive after shift).",
+ "_remeasure_note": "MUST be re-run inside the final verifier image before release \u2014 reference runs set the anchors, per the contribution rules. If the strong reference and the weak heuristic are closer than ~1.5x on any stream after re-measurement, revisit the load regime (this is the honest-failure gate).",
+ "cases": {
+  "s42": {
+   "baseline": 4065.9,
+   "weak": 7025.0,
+   "sota": 9469.0,
+   "upper": 14364.0
+  },
+  "s137": {
+   "baseline": 4303.5,
+   "weak": 7438.0,
+   "sota": 9546.1,
+   "upper": 14323.0
+  },
+  "s2024": {
+   "baseline": 4591.6,
+   "weak": 7424.0,
+   "sota": 9574.0,
+   "upper": 14251.0
+  }
+ },
+ "_validation_2026_09_01": "Re-measured through the task's own runner after the routing-default change, on the materialized hidden streams: starter 3017/3428/3311, nrm 7120/7341/7318, strong reference 8502/8881/8953 (unchanged \u2014 it had already used available_shortest explicitly). The weak->strong band is +21%; starter->weak is 2.2x. Starter tier is the noisiest across seeds (first-fit chaos, ~10-20%); per-stream anchor normalization absorbs stream difficulty but not within-tier method noise.",
+ "_validation_2026_09_02": "Re-measured through the task's own runner at the final regime (rate 0.12) on the materialized hidden streams: starter 3809/3788/4176 (ac 0.48-0.51, remarkably stable - the first-fit chaos seen at rate 0.08 disappears under load), nrm 7025/7438/7424, strong reference 8875/8891/8994. Visible seeds 0/1/2 for the same tiers: 5448/3985/4017, 8370/8353/7971, 10380/10283/9793 (separation sweep log).",
+ "_published_references_2026_09_02": "Non-anchor references measured on the same hidden streams (r=0.12, AS routing): published heuristic SOTA pl_rank 8233/8360/8294 (normalizes to ~0.49); learning SOTA ppo_dual_gat+ (trained ~20/50 epochs, one GPU, no tuning - lower bound) 9666/9922/10014 ac~0.83. The sota anchor (0.60) stays with our in-scope heuristic: above the published heuristic SOTA, ~10% below the trained policy.",
+ "_validation_2026_09_02_c4": "c4 measured through the task runner at rate 0.12: visible 11122/10616/10468, hidden 9299/9815/9701 (ac ~0.79). Round-4 refinement of c4's neighborhood was all-negative (8 configs), i.e. a local optimum. Round records: round2 = v17 neighborhood re-tune at 0.12 (17 configs, best a035=10534 seed0); round3 = combinations (8, best c4=11122); round4 = c4 refinement (8, all < c4).",
+ "_remeasure_2026_09_19_isolated": "baseline/sota re-measured through the DECISION-ISOLATION runtime (same machine, full 1000-request streams, one rollout per stream, deterministic; validation/anchors_remeasured.json). The isolated runtime re-verdicts acceptance by trusted structural+resource replay instead of accumulating in-process constraint bookkeeping: accepted solutions that the legacy runtime flipped to rejected via intermediate-attempt violations (69/1000 on s137 for the strong reference) now deploy. starter 4065.9/4303.5/4591.6 (ac 0.508/0.512/0.542); c4 9469.0/9546.1/9574.0 (ac 0.805/0.805/0.832). Legacy-runtime numbers for the same streams: starter 3787.8 (s137), c4 9815.1 (s137). The 'weak' (nrm) and 'upper' (oracle) values are unchanged: weak is a documented legacy-runtime reference; the oracle is computed offline from the materialized streams and is runtime-independent."
+}
